@@ -1,0 +1,5 @@
+SUPABASE_SETUP.md
+supabase-schema.sql
+.DS_Store
+node_modules
+npm-debug.log

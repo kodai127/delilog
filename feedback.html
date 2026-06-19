@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#12b886">
+  <meta name="description" content="デリログへのご意見・ご要望を送信できます。">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="デリログ">
+  <meta property="og:title" content="ご意見・ご要望｜デリログ">
+  <meta property="og:description" content="デリログへのご意見・ご要望を送信できます。">
+  <meta property="og:url" content="https://uber-sales-app.vercel.app/feedback.html">
+  <meta property="og:image" content="https://uber-sales-app.vercel.app/icon.svg">
+  <meta name="twitter:card" content="summary">
+  <title>ご意見・ご要望 | デリログ</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="marketing-page">
+  <header class="marketing-hero compact">
+    <p class="eyebrow">Feedback</p>
+    <h1>ご意見・ご要望</h1>
+    <p>より使いやすいサービスにするため、率直な意見を送ってください。</p>
+  </header>
+
+  <main class="marketing-layout">
+    <form class="marketing-card feedback-form" id="feedbackForm">
+      <label>
+        良かった点
+        <textarea id="goodPoint" rows="5" required placeholder="例: 今日の売上がすぐ見えるのが良い"></textarea>
+      </label>
+      <label>
+        改善点
+        <textarea id="improvementPoint" rows="5" required placeholder="例: 入力項目をもっと減らしたい"></textarea>
+      </label>
+      <label>
+        欲しい機能
+        <textarea id="featureRequest" rows="5" required placeholder="例: 週次レポートが欲しい"></textarea>
+      </label>
+      <button class="primary-button" type="submit">送信する</button>
+      <p class="form-note" id="feedbackMessage">送信内容はこの端末にも保存され、メールアプリが開きます。</p>
+    </form>
+  </main>
+
+  <footer class="marketing-footer">
+    <a href="app.html">アプリへ戻る</a>
+    <a href="index.html">トップ</a>
+    <a href="contact.html">お問い合わせ</a>
+  </footer>
+  <script src="feedback.js"></script>
+</body>
+</html>

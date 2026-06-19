@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#12b886">
+  <meta name="description" content="デリログへのお問い合わせページです。">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="デリログ">
+  <meta property="og:title" content="お問い合わせ｜デリログ">
+  <meta property="og:description" content="デリログへのお問い合わせページです。">
+  <meta property="og:url" content="https://uber-sales-app.vercel.app/contact.html">
+  <meta property="og:image" content="https://uber-sales-app.vercel.app/icon.svg">
+  <meta name="twitter:card" content="summary">
+  <title>お問い合わせ | デリログ</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="marketing-page">
+  <header class="marketing-hero compact">
+    <p class="eyebrow">Contact</p>
+    <h1>お問い合わせ</h1>
+    <p>サービスに関する質問、不具合報告、掲載内容の相談はこちらから送信してください。</p>
+  </header>
+  <main class="marketing-layout">
+    <form class="marketing-card feedback-form" id="contactForm">
+      <label>
+        お名前
+        <input id="contactName" type="text" placeholder="任意">
+      </label>
+      <label>
+        返信先メール
+        <input id="contactEmail" type="email" placeholder="任意">
+      </label>
+      <label>
+        お問い合わせ内容
+        <textarea id="contactMessage" rows="7" required placeholder="内容を入力してください"></textarea>
+      </label>
+      <button class="primary-button" type="submit">送信する</button>
+      <p class="form-note" id="contactStatus">メールアプリが開きます。</p>
+    </form>
+  </main>
+  <footer class="marketing-footer">
+    <a href="app.html">アプリへ戻る</a>
+    <a href="index.html">トップ</a>
+    <a href="terms.html">利用規約</a>
+    <a href="privacy.html">プライバシー</a>
+  </footer>
+  <script src="feedback.js"></script>
+</body>
+</html>

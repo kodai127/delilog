@@ -1,0 +1,19 @@
+{
+  "name": "デリログ",
+  "short_name": "デリログ",
+  "description": "デリログは、フードデリバリー配達員向けの売上・経費・利益・時給管理アプリです。",
+  "start_url": "./app.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f7f6",
+  "theme_color": "#101b14",
+  "lang": "ja",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

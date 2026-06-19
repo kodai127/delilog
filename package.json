@@ -1,0 +1,12 @@
+{
+  "name": "delilog",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "deploy": "vercel --prod",
+    "preview": "vercel dev"
+  },
+  "devDependencies": {
+    "vercel": "latest"
+  }
+}
