@@ -99,6 +99,12 @@ const yen = new Intl.NumberFormat("ja-JP", {
   maximumFractionDigits: 0
 });
 
+// 画面によって存在しない要素があっても落ちないようにする
+function setText(selector, value) {
+  const element = document.querySelector(selector);
+  if (element) element.textContent = value;
+}
+
 function loadRecords() {
   try {
     return (JSON.parse(localStorage.getItem(STORAGE_KEY)) || []).map(normalizeRecord);
@@ -503,11 +509,12 @@ function updateSimpleDashboard(monthTotals) {
   const monthlyGoal = Number(settings.monthlyGoal || 0);
   const goalRate = monthlyGoal ? Math.min(999, Math.round((monthTotals.sales / monthlyGoal) * 100)) : 0;
 
-  document.querySelector("#todaySales").textContent = yen.format(todayTotals.sales);
-  document.querySelector("#todayProfit").textContent = yen.format(todayProfit);
-  document.querySelector("#todayHourly").textContent = yen.format(todayHourly);
-  document.querySelector("#monthSalesSimple").textContent = yen.format(monthTotals.sales);
-  document.querySelector("#goalRateSimple").textContent = `${goalRate}%`;
+  setText("#todaySales", yen.format(todayTotals.sales));
+  setText("#todayExpenses", yen.format(todayTotals.expenses));
+  setText("#todayProfit", yen.format(todayProfit));
+  setText("#todayHourly", yen.format(todayHourly));
+  setText("#monthSalesSimple", yen.format(monthTotals.sales));
+  setText("#goalRateSimple", `${goalRate}%`);
 }
 
 function updateMonthlyReport() {
@@ -556,11 +563,11 @@ function updateAnalytics(totals, profit) {
   const hourlyProfit = totals.workHours ? Math.round(profit / totals.workHours) : 0;
   const hourlySales = totals.workHours ? Math.round(totals.sales / totals.workHours) : 0;
 
-  document.querySelector("#estimatedIncomeTax").textContent = yen.format(incomeTax);
-  document.querySelector("#estimatedResidentTax").textContent = yen.format(residentTax);
-  document.querySelector("#estimatedHealthInsurance").textContent = yen.format(healthInsurance);
-  document.querySelector("#hourlyProfit").textContent = yen.format(hourlyProfit);
-  document.querySelector("#hourlySales").textContent = `売上時給 ${yen.format(hourlySales)}`;
+  setText("#estimatedIncomeTax", yen.format(incomeTax));
+  setText("#estimatedResidentTax", yen.format(residentTax));
+  setText("#estimatedHealthInsurance", yen.format(healthInsurance));
+  setText("#hourlyProfit", yen.format(hourlyProfit));
+  setText("#hourlySales", `売上時給 ${yen.format(hourlySales)}`);
 }
 
 function updateTaxReport(monthRecords, totals) {
@@ -635,6 +642,7 @@ function renderRecords() {
     .join("");
 
   emptyState.classList.toggle("is-visible", filteredRecords.length === 0);
+  renderCalendar();
 }
 
 function addRecord(event) {
@@ -1177,4 +1185,236 @@ if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("./service-worker.js").catch(() => {});
   });
+}
+
+// ===== カレンダー（年→月→日をタップで掘れる）=====
+// 初期化順の都合で var + 遅延初期化（renderRecordsの初回呼び出しが先に走るため）
+var calCursor;
+var calView;
+var calSelectedDay;
+
+function calPad(value) {
+  return String(value).padStart(2, "0");
+}
+
+function calCompactYen(value) {
+  if (value >= 10000) return `${Math.round(value / 1000) / 10}万`;
+  return `¥${value.toLocaleString("ja-JP")}`;
+}
+
+function calDayTotals(dateKey) {
+  return records
+    .filter((record) => record.date === dateKey)
+    .reduce(
+      (sum, record) => {
+        if (record.type === "sales") {
+          sum.sales += record.amount;
+          sum.deliveries += record.deliveries || 0;
+        } else {
+          sum.expenses += record.amount;
+        }
+        return sum;
+      },
+      { sales: 0, expenses: 0, deliveries: 0 }
+    );
+}
+
+function calRangeTotals(prefix) {
+  return records
+    .filter((record) => record.date.startsWith(prefix))
+    .reduce(
+      (sum, record) => {
+        if (record.type === "sales") sum.sales += record.amount;
+        else sum.expenses += record.amount;
+        return sum;
+      },
+      { sales: 0, expenses: 0 }
+    );
+}
+
+function renderCalendar() {
+  const grid = document.querySelector("#calGrid");
+  if (!grid) return;
+  if (!calCursor) calCursor = new Date();
+  if (!calView) calView = "month";
+
+  if (calView === "month") renderCalendarMonth(grid);
+  else renderCalendarYear(grid);
+
+  if (calSelectedDay) renderDayDetail(calSelectedDay);
+}
+
+function renderCalendarMonth(grid) {
+  const year = calCursor.getFullYear();
+  const month = calCursor.getMonth();
+  const monthKey = `${year}-${calPad(month + 1)}`;
+  const totals = calRangeTotals(monthKey);
+  const profit = totals.sales - totals.expenses;
+
+  setText("#calTitle", `${year}年${month + 1}月`);
+  setText("#calSubtitle", `もうけ ${yen.format(profit)}（稼いだ ${yen.format(totals.sales)} − 経費 ${yen.format(totals.expenses)}）`);
+
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const todayKey = todayString();
+
+  // 日ごとの売上マップ（ヒートマップ用の最大値も）
+  const dayMap = {};
+  let maxSales = 1;
+  records.forEach((record) => {
+    if (!record.date.startsWith(monthKey) || record.type !== "sales") return;
+    dayMap[record.date] = (dayMap[record.date] || 0) + record.amount;
+    if (dayMap[record.date] > maxSales) maxSales = dayMap[record.date];
+  });
+  const expenseDays = new Set(
+    records.filter((r) => r.date.startsWith(monthKey) && r.type === "expense").map((r) => r.date)
+  );
+
+  const weekdays = ["日", "月", "火", "水", "木", "金", "土"]
+    .map((label, index) => {
+      const color = index === 0 ? "var(--red)" : index === 6 ? "#22d3ee" : "var(--text-3)";
+      return `<span class="cal-weekday" style="color:${color}">${label}</span>`;
+    })
+    .join("");
+
+  let cells = "";
+  for (let blank = 0; blank < firstDay; blank += 1) {
+    cells += `<span class="cal-cell is-blank"></span>`;
+  }
+  for (let day = 1; day <= daysInMonth; day += 1) {
+    const dateKey = `${monthKey}-${calPad(day)}`;
+    const sales = dayMap[dateKey] || 0;
+    const heat = sales ? (0.12 + (sales / maxSales) * 0.3).toFixed(2) : 0;
+    const classes = [
+      "cal-cell",
+      dateKey === todayKey ? "is-today" : "",
+      dateKey === calSelectedDay ? "is-selected" : ""
+    ].join(" ");
+    const style = sales ? `style="background:rgba(52,211,153,${heat})"` : "";
+    cells += `
+      <button type="button" class="${classes}" data-cal-day="${dateKey}" ${style}>
+        <span class="cal-day-num">${day}</span>
+        ${sales ? `<span class="cal-day-amt">${calCompactYen(sales)}</span>` : ""}
+        ${!sales && expenseDays.has(dateKey) ? `<span class="cal-day-dot"></span>` : ""}
+      </button>
+    `;
+  }
+
+  grid.innerHTML = `
+    <div class="cal-weekdays">${weekdays}</div>
+    <div class="cal-cells">${cells}</div>
+  `;
+}
+
+function renderCalendarYear(grid) {
+  const year = calCursor.getFullYear();
+  const totals = calRangeTotals(String(year));
+  const profit = totals.sales - totals.expenses;
+
+  setText("#calTitle", `${year}年`);
+  setText("#calSubtitle", `年間のもうけ ${yen.format(profit)}（稼いだ ${yen.format(totals.sales)} − 経費 ${yen.format(totals.expenses)}）`);
+
+  let cells = "";
+  for (let month = 0; month < 12; month += 1) {
+    const monthKey = `${year}-${calPad(month + 1)}`;
+    const monthTotals = calRangeTotals(monthKey);
+    const isCurrent = calCursor.getMonth() === month;
+    cells += `
+      <button type="button" class="yr-cell ${isCurrent ? "is-current" : ""}" data-cal-month="${month}">
+        <span class="cal-day-num">${month + 1}月</span>
+        <span class="cal-day-amt">${monthTotals.sales ? calCompactYen(monthTotals.sales) : "-"}</span>
+      </button>
+    `;
+  }
+
+  grid.innerHTML = `<div class="yr-grid">${cells}</div>`;
+}
+
+function renderDayDetail(dateKey) {
+  const panel = document.querySelector("#dayDetailPanel");
+  if (!panel) return;
+
+  const dayRecords = records
+    .filter((record) => record.date === dateKey)
+    .sort((a, b) => b.createdAt - a.createdAt);
+  const totals = calDayTotals(dateKey);
+  const profit = totals.sales - totals.expenses;
+
+  panel.hidden = false;
+  setText("#dayDetailTitle", `${Number(dateKey.slice(5, 7))}月${Number(dateKey.slice(8))}日（${getWeekdayLabel(dateKey)}）の記録`);
+  setText(
+    "#dayDetailSummary",
+    dayRecords.length
+      ? `もうけ ${yen.format(profit)}（稼いだ ${yen.format(totals.sales)} − 経費 ${yen.format(totals.expenses)}）`
+      : "この日の記録はまだありません"
+  );
+
+  const list = document.querySelector("#dayDetailList");
+  list.innerHTML = dayRecords
+    .map((record) => {
+      const isSales = record.type === "sales";
+      const title = isSales ? record.platform || DEFAULT_PLATFORM : record.category;
+      const metaParts = [];
+      if (isSales && record.deliveries) metaParts.push(`${record.deliveries}件`);
+      if (isSales && record.startTime && record.endTime) metaParts.push(`${record.startTime}-${record.endTime}`);
+      if (isSales && record.area) metaParts.push(record.area);
+      if (!isSales) metaParts.push(record.taxCategory || "経費");
+      if (record.memo) metaParts.push(record.memo);
+      return `
+        <div class="day-rec">
+          <div class="day-rec-main">
+            <strong>${escapeHtml(title)}</strong>
+            <span>${escapeHtml(metaParts.join(" ・ ") || "-")}</span>
+          </div>
+          <b class="day-rec-amount ${isSales ? "" : "is-expense"}">${isSales ? "" : "-"}${yen.format(record.amount)}</b>
+        </div>
+      `;
+    })
+    .join("");
+}
+
+function shiftCalendar(step) {
+  if (!calCursor) calCursor = new Date();
+  if (calView === "year") calCursor = new Date(calCursor.getFullYear() + step, calCursor.getMonth(), 1);
+  else calCursor = new Date(calCursor.getFullYear(), calCursor.getMonth() + step, 1);
+  calSelectedDay = null;
+  const panel = document.querySelector("#dayDetailPanel");
+  if (panel) panel.hidden = true;
+  renderCalendar();
+}
+
+const calGridElement = document.querySelector("#calGrid");
+if (calGridElement) {
+  document.querySelector("#calPrev").addEventListener("click", () => shiftCalendar(-1));
+  document.querySelector("#calNext").addEventListener("click", () => shiftCalendar(1));
+
+  document.querySelectorAll("#calViewToggle .type-btn").forEach((button) => {
+    button.addEventListener("click", () => {
+      calView = button.dataset.calView;
+      document.querySelectorAll("#calViewToggle .type-btn").forEach((b) => {
+        b.classList.toggle("is-active", b === button);
+      });
+      renderCalendar();
+    });
+  });
+
+  calGridElement.addEventListener("click", (event) => {
+    const dayCell = event.target.closest("[data-cal-day]");
+    if (dayCell) {
+      calSelectedDay = dayCell.dataset.calDay;
+      renderCalendar();
+      return;
+    }
+    const monthCell = event.target.closest("[data-cal-month]");
+    if (monthCell) {
+      calCursor = new Date(calCursor.getFullYear(), Number(monthCell.dataset.calMonth), 1);
+      calView = "month";
+      document.querySelectorAll("#calViewToggle .type-btn").forEach((b) => {
+        b.classList.toggle("is-active", b.dataset.calView === "month");
+      });
+      renderCalendar();
+    }
+  });
+
+  renderCalendar();
 }

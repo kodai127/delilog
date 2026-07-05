@@ -20,7 +20,7 @@
   <title>デリログ | 配達員向け売上・利益・時給管理</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="icon.svg">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=20260705b">
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -52,18 +52,11 @@
     <section class="app-screen is-active" id="homeScreen" data-screen="home">
       <div class="today-dashboard" aria-label="今日のダッシュボード">
         <article class="today-main-card">
-          <span>今日の売上</span>
-          <strong id="todaySales">¥0</strong>
+          <span>今日のもうけ（自動合算）</span>
+          <strong id="todayProfit">¥0</strong>
+          <p class="today-sub">稼いだ <b id="todaySales">¥0</b> − 経費 <b id="todayExpenses">¥0</b></p>
         </article>
         <div class="today-grid">
-          <article class="today-card">
-            <span>今日の利益</span>
-            <strong id="todayProfit">¥0</strong>
-          </article>
-          <article class="today-card">
-            <span>今日の時給</span>
-            <strong id="todayHourly">¥0</strong>
-          </article>
           <article class="today-card">
             <span>今月の売上</span>
             <strong id="monthSalesSimple">¥0</strong>
@@ -75,7 +68,7 @@
         </div>
       </div>
       <button class="primary-button big-cta" id="homeRecordCta" type="button">＋ 記録をつける</button>
-      <p class="home-hint">売上をいれると、利益と時給が自動で計算されます</p>
+      <p class="home-hint">稼いだ額と経費をいれると、もうけを自動で合算します</p>
     </section>
 
     <section class="app-screen" id="recordScreen" data-screen="record">
@@ -232,23 +225,10 @@
       </section>
 
       <section class="panel analytics-panel secondary-section" id="analysisSection">
-      <div class="section-heading">
-        <h2>⏱️ ほんとうの時給</h2>
-        <p>経費をひいた、手もとに残るお金で計算した時給です。</p>
-      </div>
-
-      <div class="analysis-grid">
-        <article class="analysis-card highlight">
-          <span>実質時給</span>
-          <strong id="hourlyProfit">¥0</strong>
-          <p id="hourlySales">売上時給 ¥0</p>
-        </article>
-      </div>
-
-      <div class="efficiency-section">
+      <div class="efficiency-section" style="margin-top:0;">
         <div class="efficiency-heading">
           <h3>🏆 稼げるのはいつ・どこ？</h3>
-          <p>時給が高い順にならびます。稼働時間を入れると出ます。</p>
+          <p>稼働時間を入れると、効率のいい働き方が見えてきます。</p>
         </div>
         <div class="ranking-grid">
           <article class="ranking-card">
@@ -368,6 +348,39 @@
       </details>
     </section>
 
+    <section class="app-screen" id="calendarScreen" data-screen="calendar">
+      <section class="panel calendar-panel">
+        <div class="section-heading">
+          <h2>📅 カレンダー</h2>
+          <p>日にちをタップすると、その日の記録が見られます。</p>
+        </div>
+
+        <div class="cal-nav">
+          <button class="ghost-button cal-nav-btn" id="calPrev" type="button">‹</button>
+          <div class="cal-title-wrap">
+            <strong id="calTitle">-</strong>
+            <span id="calSubtitle">-</span>
+          </div>
+          <button class="ghost-button cal-nav-btn" id="calNext" type="button">›</button>
+        </div>
+
+        <div class="type-toggle cal-view-toggle" id="calViewToggle">
+          <button type="button" class="type-btn is-active" data-cal-view="month">月ごと</button>
+          <button type="button" class="type-btn" data-cal-view="year">年ごと</button>
+        </div>
+
+        <div id="calGrid"></div>
+      </section>
+
+      <section class="panel day-detail-panel" id="dayDetailPanel" hidden>
+        <div class="section-heading">
+          <h2 id="dayDetailTitle">-</h2>
+          <p id="dayDetailSummary">-</p>
+        </div>
+        <div class="day-detail-list" id="dayDetailList"></div>
+      </section>
+    </section>
+
     <section class="app-screen" id="settingsScreen" data-screen="settings">
       <section class="settings-card" id="settingsSection">
       <div class="section-heading">
@@ -400,17 +413,18 @@
   </main>
 
   <nav class="bottom-nav" aria-label="主要ナビゲーション">
-    <button class="nav-button is-active" type="button" data-target-screen="home">🏠 ホーム</button>
-    <button class="nav-button" type="button" data-target-screen="record">✏️ 記録</button>
-    <button class="nav-button" type="button" data-target-screen="analysis">📊 分析</button>
-    <button class="nav-button" type="button" data-target-screen="settings">⚙️ 設定</button>
+    <button class="nav-button is-active" type="button" data-target-screen="home"><span class="nav-ico">🏠</span><span>ホーム</span></button>
+    <button class="nav-button" type="button" data-target-screen="record"><span class="nav-ico">✏️</span><span>記録</span></button>
+    <button class="nav-button" type="button" data-target-screen="calendar"><span class="nav-ico">📅</span><span>カレンダー</span></button>
+    <button class="nav-button" type="button" data-target-screen="analysis"><span class="nav-ico">📊</span><span>分析</span></button>
+    <button class="nav-button" type="button" data-target-screen="settings"><span class="nav-ico">⚙️</span><span>設定</span></button>
   </nav>
 
   <input id="csvFileInput" type="file" accept=".csv,text/csv" hidden>
   <input id="restoreFileInput" type="file" accept=".json,application/json" hidden>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
-  <script src="script.js"></script>
+  <script src="script.js?v=20260705b"></script>
   <script>
     // 売上/経費のワンタップ切替（隠しselect #type と同期して既存ロジックを動かす）
     document.querySelectorAll('#typeToggle .type-btn').forEach((btn) => {
