@@ -3,63 +3,119 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#12b886">
+  <meta name="theme-color" content="#07090f">
   <meta name="description" content="デリログは、フードデリバリー配達員向けの売上、利益、時給、プラットフォーム別分析サービスです。">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="デリログ">
   <meta property="og:title" content="デリログ｜配達員向け売上・利益・時給分析">
-  <meta property="og:description" content="Uber Eats・出前館・menu・Rocket Now・Woltの売上、利益、時給をスマホで管理。">
+  <meta property="og:description" content="Uber Eats・出前館・menu・Rocket Nowの売上、利益、時給をスマホで管理。">
   <meta property="og:url" content="https://uber-sales-app.vercel.app/landing.html">
   <meta property="og:image" content="https://uber-sales-app.vercel.app/icon.svg">
   <meta name="twitter:card" content="summary">
   <title>デリログ｜配達員向け売上・利益・時給分析</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="lp.css">
 </head>
-<body class="marketing-page">
-  <header class="marketing-hero">
-    <p class="eyebrow">Delilog</p>
-    <h1>デリログ</h1>
-    <p>Uber Eats、出前館、menu、Rocket Now、Woltの売上・利益・時給をスマホでシンプルに記録できます。</p>
-    <a class="primary-link" href="app.html">アプリを開く</a>
+<body class="lp">
+  <div class="bg-decor" aria-hidden="true"></div>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="nav-brand" href="/"><span class="logo-dot">🛵</span>デリログ</a>
+      <div class="nav-links">
+        <a class="nav-cta" href="app.html">アプリを開く</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container">
+      <span class="hero-badge"><span class="pulse"></span>Delilog</span>
+      <h1><span class="grad">デリログ</span></h1>
+      <p class="hero-sub">Uber Eats、出前館、menu、Rocket Nowの売上・利益・時給をスマホでシンプルに記録できます。</p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="app.html">アプリを開く →</a>
+      </div>
+    </div>
   </header>
 
-  <main class="marketing-layout">
-    <section class="marketing-card">
-      <h2>何ができるか</h2>
-      <p>毎日の配達の売上を記録し、利益、時給、プラットフォーム別の効率を確認できます。確定申告に向けた経費分類も補助します。</p>
+  <main>
+    <section class="block reveal" style="padding-top:0;">
+      <div class="container">
+        <span class="section-eyebrow">Features</span>
+        <h2 class="section-title">何ができるか</h2>
+        <p class="section-lead">毎日の配達の売上を記録し、利益、時給、プラットフォーム別の効率を確認できます。確定申告に向けた経費分類も補助します。</p>
+        <div class="feature-grid">
+          <article class="f-card">
+            <div class="f-icon">📝</div>
+            <h3>売上管理</h3>
+            <p>日付、プラットフォーム、件数、稼働時間、エリアを記録できます。</p>
+          </article>
+          <article class="f-card">
+            <div class="f-icon">💰</div>
+            <h3>利益管理</h3>
+            <p>売上と経費を入力すると、利益を自動で計算します。</p>
+          </article>
+          <article class="f-card">
+            <div class="f-icon">⏱️</div>
+            <h3>時給分析</h3>
+            <p>稼働時間から、今日の時給やエリア別・時間帯別の効率を確認できます。</p>
+          </article>
+          <article class="f-card">
+            <div class="f-icon">📊</div>
+            <h3>プラットフォーム別分析</h3>
+            <p>Uber Eats、出前館、menu、Rocket Nowごとの売上、件数、稼働時間、時給を比較できます。</p>
+          </article>
+        </div>
+      </div>
     </section>
 
-    <section class="marketing-grid">
-      <article class="marketing-card">
-        <h2>売上管理</h2>
-        <p>日付、プラットフォーム、件数、稼働時間、エリアを記録できます。</p>
-      </article>
-      <article class="marketing-card">
-        <h2>利益管理</h2>
-        <p>売上と経費を入力すると、利益を自動で計算します。</p>
-      </article>
-      <article class="marketing-card">
-        <h2>時給分析</h2>
-        <p>稼働時間から、今日の時給やエリア別・時間帯別の効率を確認できます。</p>
-      </article>
-      <article class="marketing-card">
-        <h2>プラットフォーム別分析</h2>
-        <p>Uber Eats、出前館、menu、Rocket Now、Woltごとの売上、件数、稼働時間、時給を比較できます。</p>
-      </article>
-    </section>
-
-    <section class="marketing-card">
-      <h2>配達の判断を数字でサポート</h2>
-      <p>どのアプリで、どの時間帯に、どのエリアで働くと効率がよいかを見える化します。</p>
-      <a class="secondary-link" href="app.html">使ってみる</a>
+    <section class="block reveal">
+      <div class="container">
+        <div class="final-cta">
+          <h2>配達の判断を数字でサポート</h2>
+          <p>どのアプリで、どの時間帯に、どのエリアで働くと効率がよいかを見える化します。</p>
+          <a class="btn-primary" href="app.html">使ってみる →</a>
+        </div>
+      </div>
     </section>
   </main>
 
-  <footer class="marketing-footer">
-    <a href="app.html">アプリ</a>
-    <a href="terms.html">利用規約</a>
-    <a href="privacy.html">プライバシーポリシー</a>
-    <a href="contact.html">お問い合わせ</a>
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand"><span class="logo-dot">🛵</span>デリログ</div>
+          <p class="footer-desc">フードデリバリー配達員のための売上・利益・時給管理サービス。</p>
+        </div>
+        <div>
+          <h4>サービス</h4>
+          <ul class="footer-links">
+            <li><a href="app.html">アプリ</a></li>
+            <li><a href="/">トップページ</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>サポート</h4>
+          <ul class="footer-links">
+            <li><a href="contact.html">お問い合わせ</a></li>
+            <li><a href="terms.html">利用規約</a></li>
+            <li><a href="privacy.html">プライバシーポリシー</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 デリログ</span>
+      </div>
+    </div>
   </footer>
+
+  <script>
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+  </script>
 </body>
 </html>
