@@ -74,17 +74,24 @@
           </article>
         </div>
       </div>
+      <button class="primary-button big-cta" id="homeRecordCta" type="button">＋ 記録をつける</button>
+      <p class="home-hint">売上をいれると、利益と時給が自動で計算されます</p>
     </section>
 
     <section class="app-screen" id="recordScreen" data-screen="record">
       <section class="panel input-panel">
         <div class="section-heading">
-          <h2>記録を追加</h2>
-          <p>売上または経費を入力してください。</p>
+          <h2>✏️ 記録をつける</h2>
+          <p>いくら稼いだ？を入れるだけでOK。</p>
         </div>
 
         <form id="entryForm" class="entry-form">
-          <label>
+          <div class="type-toggle full-width" id="typeToggle">
+            <button type="button" class="type-btn is-active" data-type="sales">💰 稼いだ</button>
+            <button type="button" class="type-btn" data-type="expense">🧾 使った（経費）</button>
+          </div>
+
+          <label class="hidden-field">
             種類
             <select id="type" required>
               <option value="sales">売上</option>
@@ -92,58 +99,97 @@
             </select>
           </label>
 
+          <label class="full-width amount-field">
+            金額（円）
+            <input id="amount" type="number" min="0" step="1" placeholder="例: 6500" required>
+          </label>
+
           <label>
             日付
             <input id="date" type="date" required>
           </label>
 
-          <label>
-            金額
-            <input id="amount" type="number" min="0" step="1" placeholder="例: 6500" required>
-          </label>
-
           <label id="platformField">
-            プラットフォーム
+            アプリ
             <select id="platform"></select>
           </label>
 
-          <label id="deliveriesField">
-            配達件数
-            <input id="deliveries" type="number" min="0" step="1" placeholder="例: 12">
-          </label>
+          <details class="more-fields full-width" id="moreFields">
+            <summary>くわしく記録する（時給を出すなら開く）</summary>
+            <div class="more-grid">
+              <label id="deliveriesField">
+                配達件数
+                <input id="deliveries" type="number" min="0" step="1" placeholder="例: 12">
+              </label>
 
-          <label id="workHoursField">
-            稼働時間
-            <input id="workHours" type="number" min="0" step="0.25" placeholder="例: 4.5">
-          </label>
+              <label id="workHoursField">
+                稼働時間（h）
+                <input id="workHours" type="number" min="0" step="0.25" placeholder="例: 4.5">
+              </label>
 
-          <label id="areaField">
-            稼働エリア
-            <input id="area" type="text" maxlength="40" placeholder="例: 渋谷 / 新宿 / 横浜">
-          </label>
+              <label id="startTimeField">
+                開始時刻
+                <input id="startTime" type="time">
+              </label>
 
-          <label id="startTimeField">
-            開始時刻
-            <input id="startTime" type="time">
-          </label>
+              <label id="endTimeField">
+                終了時刻
+                <input id="endTime" type="time">
+              </label>
 
-          <label id="endTimeField">
-            終了時刻
-            <input id="endTime" type="time">
-          </label>
+              <label id="areaField">
+                稼働エリア
+                <input id="area" type="text" maxlength="40" placeholder="例: 渋谷 / 新宿 / 横浜">
+              </label>
 
-          <label>
-            カテゴリ
-            <select id="category" required></select>
-          </label>
+              <label>
+                カテゴリ
+                <select id="category" required></select>
+              </label>
 
-          <label class="full-width">
-            メモ
-            <input id="memo" type="text" maxlength="60" placeholder="例: 昼ピーク / ガソリン代">
-          </label>
+              <label class="full-width">
+                メモ
+                <input id="memo" type="text" maxlength="60" placeholder="例: 昼ピーク / ガソリン代">
+              </label>
+            </div>
+          </details>
 
           <button class="primary-button full-width" type="submit">追加する</button>
         </form>
+      </section>
+
+      <section class="panel records-panel" id="recordsSection">
+      <div class="toolbar">
+        <div class="section-heading">
+          <h2>📋 これまでの記録</h2>
+          <p id="recordCount">0件の記録</p>
+        </div>
+
+        <div class="filters">
+          <label>
+            月
+            <input id="monthFilter" type="month">
+          </label>
+          <label>
+            表示
+            <select id="typeFilter">
+              <option value="all">すべて</option>
+              <option value="sales">売上のみ</option>
+              <option value="expense">経費のみ</option>
+            </select>
+          </label>
+          <label>
+            アプリ
+            <select id="platformFilter"></select>
+          </label>
+        </div>
+      </div>
+
+      <div class="records-list" id="recordsBody"></div>
+
+      <div class="empty-state" id="emptyState">
+        まだ記録がありません。上のフォームから最初の1件をつけてみましょう。
+      </div>
       </section>
     </section>
 
@@ -160,34 +206,6 @@
         </div>
         <p>月間目標達成率</p>
       </div>
-      </section>
-
-      <section class="settings-card secondary-section" id="settingsSection">
-      <div class="section-heading">
-        <h2>設定・データ</h2>
-        <p>目標設定やCSV、バックアップはこちら。</p>
-      </div>
-      <label>
-        月間売上目標
-        <div class="inline-control">
-          <input id="monthlyGoal" type="number" min="0" step="1000" placeholder="例: 300000">
-          <button class="primary-button" id="saveGoal" type="button">保存</button>
-        </div>
-      </label>
-      <div class="data-actions">
-        <button class="ghost-button" id="exportCsv" type="button">CSV出力</button>
-        <button class="ghost-button" id="importCsvButton" type="button">CSV取込</button>
-        <button class="ghost-button" id="backupData" type="button">バックアップ</button>
-        <button class="ghost-button" id="restoreDataButton" type="button">復元</button>
-        <button class="danger-button" id="clearData" type="button">全削除</button>
-      </div>
-      <nav class="support-links" aria-label="サポートリンク">
-        <a href="index.html">サービス紹介</a>
-        <a href="feedback.html">フィードバック</a>
-        <a href="terms.html">利用規約</a>
-        <a href="privacy.html">プライバシー</a>
-        <a href="contact.html">お問い合わせ</a>
-      </nav>
       </section>
 
       <section class="summary-grid secondary-section" aria-label="集計">
@@ -215,26 +233,11 @@
 
       <section class="panel analytics-panel secondary-section" id="analysisSection">
       <div class="section-heading">
-        <h2>分析</h2>
-        <p>年間利益、稼働時間、月間目標から自動計算します。</p>
+        <h2>⏱️ ほんとうの時給</h2>
+        <p>経費をひいた、手もとに残るお金で計算した時給です。</p>
       </div>
 
       <div class="analysis-grid">
-        <article class="analysis-card">
-          <span>予測所得税</span>
-          <strong id="estimatedIncomeTax">¥0</strong>
-          <p>年間利益ベース</p>
-        </article>
-        <article class="analysis-card">
-          <span>予測住民税</span>
-          <strong id="estimatedResidentTax">¥0</strong>
-          <p>概算10%</p>
-        </article>
-        <article class="analysis-card">
-          <span>予測国保</span>
-          <strong id="estimatedHealthInsurance">¥0</strong>
-          <p>概算10%</p>
-        </article>
         <article class="analysis-card highlight">
           <span>実質時給</span>
           <strong id="hourlyProfit">¥0</strong>
@@ -244,8 +247,8 @@
 
       <div class="efficiency-section">
         <div class="efficiency-heading">
-          <h3>効率ランキング</h3>
-          <p>売上時給が高い働き方を月次データから分析します。</p>
+          <h3>🏆 稼げるのはいつ・どこ？</h3>
+          <p>時給が高い順にならびます。稼働時間を入れると出ます。</p>
         </div>
         <div class="ranking-grid">
           <article class="ranking-card">
@@ -264,9 +267,10 @@
       </div>
       </section>
 
-      <section class="panel report-panel secondary-section">
+      <details class="panel panel-collapse secondary-section">
+      <summary>📈 月次レポートをみる</summary>
+      <div class="collapse-body">
       <div class="section-heading">
-        <h2>月次レポート</h2>
         <p id="reportMonthLabel">今月の実績</p>
       </div>
 
@@ -301,15 +305,35 @@
       </div>
 
       <div class="platform-section">
-        <h3>プラットフォーム別分析</h3>
+        <h3>アプリ別の比較</h3>
         <div id="platformAnalysis" class="platform-grid"></div>
       </div>
-      </section>
+      </div>
+      </details>
 
-      <section class="panel tax-panel secondary-section">
+      <details class="panel panel-collapse secondary-section">
+      <summary>🧾 税金・確定申告のめやすをみる</summary>
+      <div class="collapse-body">
       <div class="section-heading">
-        <h2>確定申告補助</h2>
         <p id="taxReportLabel">選択中の月をもとに、事業所得の目安を集計します。</p>
+      </div>
+
+      <div class="analysis-grid" style="margin-bottom:16px;">
+        <article class="analysis-card">
+          <span>予測所得税</span>
+          <strong id="estimatedIncomeTax">¥0</strong>
+          <p>年間利益ベース</p>
+        </article>
+        <article class="analysis-card">
+          <span>予測住民税</span>
+          <strong id="estimatedResidentTax">¥0</strong>
+          <p>概算10%</p>
+        </article>
+        <article class="analysis-card">
+          <span>予測国保</span>
+          <strong id="estimatedHealthInsurance">¥0</strong>
+          <p>概算10%</p>
+        </article>
       </div>
 
       <div class="tax-grid">
@@ -340,48 +364,46 @@
           </div>
         </div>
       </div>
-      </section>
-
-      <section class="panel records-panel" id="recordsSection">
-      <div class="toolbar">
-        <div class="section-heading">
-          <h2>記録一覧</h2>
-          <p id="recordCount">0件の記録</p>
-        </div>
-
-        <div class="filters">
-          <label>
-            月
-            <input id="monthFilter" type="month">
-          </label>
-          <label>
-            表示
-            <select id="typeFilter">
-              <option value="all">すべて</option>
-              <option value="sales">売上のみ</option>
-              <option value="expense">経費のみ</option>
-            </select>
-          </label>
-          <label>
-            プラットフォーム
-            <select id="platformFilter"></select>
-          </label>
-        </div>
       </div>
+      </details>
+    </section>
 
-      <div class="records-list" id="recordsBody"></div>
-
-      <div class="empty-state" id="emptyState">
-        まだ記録がありません。
+    <section class="app-screen" id="settingsScreen" data-screen="settings">
+      <section class="settings-card" id="settingsSection">
+      <div class="section-heading">
+        <h2>⚙️ 設定・データ</h2>
+        <p>目標設定やCSV、バックアップはこちら。</p>
       </div>
+      <label>
+        月間売上目標
+        <div class="inline-control">
+          <input id="monthlyGoal" type="number" min="0" step="1000" placeholder="例: 300000">
+          <button class="primary-button" id="saveGoal" type="button">保存</button>
+        </div>
+      </label>
+      <div class="data-actions">
+        <button class="ghost-button" id="exportCsv" type="button">CSV出力</button>
+        <button class="ghost-button" id="importCsvButton" type="button">CSV取込</button>
+        <button class="ghost-button" id="backupData" type="button">バックアップ</button>
+        <button class="ghost-button" id="restoreDataButton" type="button">復元</button>
+        <button class="danger-button" id="clearData" type="button">全削除</button>
+      </div>
+      <nav class="support-links" aria-label="サポートリンク">
+        <a href="index.html">サービス紹介</a>
+        <a href="feedback.html">フィードバック</a>
+        <a href="terms.html">利用規約</a>
+        <a href="privacy.html">プライバシー</a>
+        <a href="contact.html">お問い合わせ</a>
+      </nav>
       </section>
     </section>
   </main>
 
   <nav class="bottom-nav" aria-label="主要ナビゲーション">
-    <button class="nav-button is-active" type="button" data-target-screen="home">ホーム</button>
-    <button class="nav-button" type="button" data-target-screen="record">記録</button>
-    <button class="nav-button" type="button" data-target-screen="analysis">分析</button>
+    <button class="nav-button is-active" type="button" data-target-screen="home">🏠 ホーム</button>
+    <button class="nav-button" type="button" data-target-screen="record">✏️ 記録</button>
+    <button class="nav-button" type="button" data-target-screen="analysis">📊 分析</button>
+    <button class="nav-button" type="button" data-target-screen="settings">⚙️ 設定</button>
   </nav>
 
   <input id="csvFileInput" type="file" accept=".csv,text/csv" hidden>
@@ -389,5 +411,22 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
   <script src="script.js"></script>
+  <script>
+    // 売上/経費のワンタップ切替（隠しselect #type と同期して既存ロジックを動かす）
+    document.querySelectorAll('#typeToggle .type-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#typeToggle .type-btn').forEach((b) => {
+          b.classList.toggle('is-active', b === btn);
+        });
+        const typeSelect = document.getElementById('type');
+        typeSelect.value = btn.dataset.type;
+        typeSelect.dispatchEvent(new Event('change'));
+      });
+    });
+    // ホームの大ボタン → 記録タブへ
+    document.getElementById('homeRecordCta').addEventListener('click', () => {
+      document.querySelector('.bottom-nav [data-target-screen="record"]').click();
+    });
+  </script>
 </body>
 </html>
