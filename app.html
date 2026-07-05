@@ -20,7 +20,7 @@
   <title>デリログ | 配達員向け売上・利益・時給管理</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="icon.svg">
-  <link rel="stylesheet" href="styles.css?v=20260705c">
+  <link rel="stylesheet" href="styles.css?v=20260705d">
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -92,6 +92,11 @@
               <option value="expense">経費</option>
             </select>
           </label>
+
+          <div class="full-width scan-block">
+            <button class="ghost-button scan-button" id="scanButton" type="button">📷 スクショで自動入力（AI）</button>
+            <p class="scan-status" id="scanStatus"></p>
+          </div>
 
           <label class="full-width amount-field">
             金額（円）
@@ -423,9 +428,11 @@
 
   <input id="csvFileInput" type="file" accept=".csv,text/csv" hidden>
   <input id="restoreFileInput" type="file" accept=".json,application/json" hidden>
+  <input id="scanFileInput" type="file" accept="image/*" hidden>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
   <script src="script.js?v=20260705b"></script>
+  <script src="scan.js?v=20260705a"></script>
   <script>
     // 売上/経費のワンタップ切替（隠しselect #type と同期して既存ロジックを動かす）
     function syncTypeToggle() {
