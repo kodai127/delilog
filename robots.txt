@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
-
 Sitemap: https://uber-sales-app.vercel.app/sitemap.xml
