@@ -1,44 +1,11 @@
-const CACHE_NAME = "delilog-v14";
-const APP_ASSETS = [
-  "./",
-  "./index.html",
-  "./app.html",
-  "./landing.html",
-  "./feedback.html",
-  "./terms.html",
-  "./privacy.html",
-  "./contact.html",
-  "./sitemap.xml",
-  "./robots.txt",
-  "./styles.css",
-  "./script.js",
-  "./feedback.js",
-  "./supabase-config.js",
-  "./manifest.webmanifest",
-  "./icon.svg"
-];
-
-self.addEventListener("install", (event) => {
-  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_ASSETS)));
-  self.skipWaiting();
-});
-
+// kill-switch: 旧cache-first SWを完全に無効化する（2026-07-05 本番障害対応）
+self.addEventListener("install", () => self.skipWaiting());
 self.addEventListener("activate", (event) => {
-  event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key)))
-    )
-  );
-  self.clients.claim();
-});
-
-self.addEventListener("fetch", (event) => {
-  if (event.request.method !== "GET") return;
-
-  event.respondWith(
-    caches.match(event.request).then((cached) => {
-      if (cached) return cached;
-      return fetch(event.request).catch(() => caches.match("./index.html"));
-    })
-  );
+  event.waitUntil((async () => {
+    const keys = await caches.keys();
+    await Promise.all(keys.map((k) => caches.delete(k)));
+    await self.registration.unregister();
+    const clients = await self.clients.matchAll({ type: "window" });
+    clients.forEach((c) => c.navigate(c.url));
+  })());
 });

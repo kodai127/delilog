@@ -1181,10 +1181,7 @@ updatePlatformFilterOptions();
 renderRecords();
 initializeSupabase();
 
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./service-worker.js").catch(() => {});
-  });
+// service worker registration removed (kill-switch deployed 2026-07-05));
 }
 
 // ===== カレンダー（年→月→日をタップで掘れる）=====
