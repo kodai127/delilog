@@ -8,16 +8,35 @@ const MAX_TOKENS = 400;
 const DAILY_LIMIT = 10; // 端末ごと1日10枚（ベストエフォート。コスト暴走の上限）
 const MAX_IMAGE_B64 = 3_000_000; // ≈2.2MB。クライアント側で縮小済み前提
 
-const hits = new Map(); // deviceId -> { day, count }
+// セキュリティ点検(2026-07-05)対応: deviceId自己申告だけに頼らず多層で守る
+//  1) Origin許可リスト（ブラウザからの第三者サイト直叩きを遮断。ネイティブアプリはOriginなし=許可）
+//  2) deviceId別 1日10枚
+//  3) IP別 1日30枚（deviceId偽装への障壁）
+//  4) 全体で1日500枚のサーキットブレーカー（コスト暴走の最終防衛。≈¥150/日上限）
+// メモリMapはインスタンス毎のベストエフォートだが、(4)によりコスト上限は数倍程度で頭打ちになる
+const ALLOWED_ORIGINS = ['https://uber-sales-app.vercel.app'];
+const IP_DAILY_LIMIT = 30;
+const GLOBAL_DAILY_LIMIT = 500;
 
-function rateLimited(deviceId) {
+const hits = new Map(); // key -> { day, count }
+let globalHits = { day: '', count: 0 };
+
+function bump(key, limit) {
   const day = new Date().toISOString().slice(0, 10);
-  const rec = hits.get(deviceId);
+  const rec = hits.get(key);
   const count = rec && rec.day === day ? rec.count : 0;
-  if (count >= DAILY_LIMIT) return true;
-  hits.set(deviceId, { day, count: count + 1 });
+  if (count >= limit) return false;
+  hits.set(key, { day, count: count + 1 });
   if (hits.size > 5000) hits.clear();
-  return false;
+  return true;
+}
+
+function bumpGlobal() {
+  const day = new Date().toISOString().slice(0, 10);
+  if (globalHits.day !== day) globalHits = { day, count: 0 };
+  if (globalHits.count >= GLOBAL_DAILY_LIMIT) return false;
+  globalHits.count += 1;
+  return true;
 }
 
 const SYSTEM_PROMPT = `あなたはフードデリバリー配達員の売上画面スクリーンショットから数値を抽出するアシスタント。
@@ -63,7 +82,14 @@ const OUTPUT_FORMAT = {
 };
 
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  // ブラウザ由来のリクエストは自サイトのみ許可。Originヘッダが無いネイティブアプリは通す
+  const origin = req.headers.origin;
+  if (origin && !ALLOWED_ORIGINS.includes(origin)) {
+    res.status(403).json({ ok: false, error: 'forbidden origin' });
+    return;
+  }
+  res.setHeader('Access-Control-Allow-Origin', ALLOWED_ORIGINS[0]);
+  res.setHeader('Vary', 'Origin');
   res.setHeader('Access-Control-Allow-Headers', 'content-type');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   if (req.method === 'OPTIONS') {
@@ -84,7 +110,8 @@ export default async function handler(req, res) {
     res.status(400).json({ ok: false, error: 'deviceId required' });
     return;
   }
-  if (rateLimited(deviceId)) {
+  const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'unknown';
+  if (!bump(`d:${deviceId}`, DAILY_LIMIT) || !bump(`ip:${ip}`, IP_DAILY_LIMIT) || !bumpGlobal()) {
     res.status(429).json({ ok: false, error: 'daily limit reached' });
     return;
   }
