@@ -1272,7 +1272,7 @@ function renderCalendarMonth(grid) {
 
   const weekdays = ["日", "月", "火", "水", "木", "金", "土"]
     .map((label, index) => {
-      const color = index === 0 ? "var(--red)" : index === 6 ? "#22d3ee" : "var(--text-3)";
+      const color = index === 0 ? "var(--red)" : index === 6 ? "#0EA5E9" : "var(--text-3)";
       return `<span class="cal-weekday" style="color:${color}">${label}</span>`;
     })
     .join("");
@@ -1290,7 +1290,7 @@ function renderCalendarMonth(grid) {
       dateKey === todayKey ? "is-today" : "",
       dateKey === calSelectedDay ? "is-selected" : ""
     ].join(" ");
-    const style = sales ? `style="background:rgba(52,211,153,${heat})"` : "";
+    const style = sales ? `style="background:rgba(16,185,129,${heat})"` : "";
     cells += `
       <button type="button" class="${classes}" data-cal-day="${dateKey}" ${style}>
         <span class="cal-day-num">${day}</span>
