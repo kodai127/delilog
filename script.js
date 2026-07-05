@@ -1181,8 +1181,7 @@ updatePlatformFilterOptions();
 renderRecords();
 initializeSupabase();
 
-// service worker registration removed (kill-switch deployed 2026-07-05));
-}
+// service worker registration removed (kill-switch deployed 2026-07-05)
 
 // ===== カレンダー（年→月→日をタップで掘れる）=====
 // 初期化順の都合で var + 遅延初期化（renderRecordsの初回呼び出しが先に走るため）
