@@ -197,7 +197,7 @@ body.lp {
   font-size: 12.5px; font-weight: 700;
   color: var(--text-3);
   border: 1px solid var(--border);
-  background: #FFFFFF;
+  background: var(--surface);
   padding: 6px 14px;
   border-radius: 999px;
   letter-spacing: 0.02em;
@@ -209,7 +209,7 @@ body.lp {
   margin: 0 auto;
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
-  background: #FFFFFF;
+  background: var(--surface);
   backdrop-filter: blur(20px);
   padding: 24px;
   text-align: left;
@@ -229,7 +229,7 @@ body.lp {
 .mock-hero-value small { font-size: 18px; font-weight: 700; }
 .mock-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 16px; }
 .mock-stat {
-  background: #FFFFFF;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 10px 8px;
@@ -239,7 +239,7 @@ body.lp {
 .mock-stat span { font-size: 10px; color: var(--text-3); font-weight: 600; }
 .mock-bar-row { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
 .mock-bar-name { font-size: 10.5px; font-weight: 700; color: var(--text-2); width: 72px; flex-shrink: 0; }
-.mock-bar { flex: 1; height: 6px; border-radius: 3px; background: #FFFFFF; overflow: hidden; }
+.mock-bar { flex: 1; height: 6px; border-radius: 3px; background: var(--surface); overflow: hidden; }
 .mock-bar i { display: block; height: 100%; border-radius: 3px; background: var(--brand-grad); }
 .mock-bar-val { font-size: 10.5px; color: var(--text-3); font-weight: 700; width: 44px; text-align: right; }
 
@@ -278,7 +278,7 @@ section.block { padding: 88px 0; position: relative; }
   gap: 18px;
 }
 .f-card {
-  background: #FFFFFF;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 32px 28px;
@@ -319,7 +319,7 @@ section.block { padding: 88px 0; position: relative; }
 
 /* ---- メリット（チェックリスト） ---- */
 .benefit-wrap {
-  background: #FFFFFF;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: clamp(28px, 5vw, 52px);
@@ -357,7 +357,7 @@ section.block { padding: 88px 0; position: relative; }
   margin: 0 auto;
 }
 .price-card {
-  background: #FFFFFF;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 36px 30px;
@@ -469,7 +469,7 @@ section.block { padding: 88px 0; position: relative; }
   border-top: 1px solid var(--border);
   padding: 56px 0 40px;
   margin-top: 88px;
-  background: #FFFFFF;
+  background: var(--surface);
 }
 .footer-grid {
   display: grid;
@@ -512,4 +512,25 @@ section.block { padding: 88px 0; position: relative; }
   .hero-actions { flex-direction: column; align-items: stretch; padding: 0 8px; }
   .btn-primary, .btn-ghost { justify-content: center; }
   .mock { max-width: 100%; }
+}
+
+/* ===== ナイトモード（端末設定に自動追従） ===== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #121416;
+    --bg-soft: #1C1F23;
+    --surface: #1C1F23;
+    --surface-strong: #26292E;
+    --border: #2E3237;
+    --border-strong: #3A3F45;
+    --text: #F2F4F6;
+    --text-2: #A6ADB6;
+    --text-3: #6E7681;
+  }
+  .nav { background: rgba(18, 20, 22, 0.85); }
+  .bg-decor::after {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  }
 }

@@ -131,7 +131,7 @@ body::before {
 .today-card {
   border-radius: var(--radius-md);
   padding: 18px;
-  background: #FFFFFF;
+  background: var(--surface);
   border: 1px solid var(--border);
   transition: border-color 0.2s, transform 0.2s;
 }
@@ -143,7 +143,7 @@ body::before {
 .panel,
 .hero-card,
 .settings-card {
-  background: #FFFFFF;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 24px 20px;
@@ -171,7 +171,7 @@ body::before {
 .entry-form .full-width { grid-column: 1 / -1; }
 input, select, textarea {
   width: 100%;
-  background: #FFFFFF;
+  background: var(--surface);
   border: 1.5px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 12px 14px;
@@ -258,7 +258,7 @@ input[type='date'], input[type='time'], input[type='month'] { min-height: 46px; 
   align-items: center;
   gap: 20px;
   flex-wrap: wrap;
-  background: #FFFFFF;
+  background: var(--surface);
   border-color: rgba(16, 185, 129, 0.35);
 }
 .hero-card span { font-size: 12.5px; font-weight: 700; color: var(--brand-2); }
@@ -289,7 +289,7 @@ input[type='date'], input[type='time'], input[type='month'] { min-height: 46px; 
   position: absolute;
   inset: 8px;
   border-radius: 50%;
-  background: #FFFFFF;
+  background: var(--surface);
 }
 .goal-ring span { position: relative; font-size: 18px; font-weight: 900; }
 
@@ -326,7 +326,7 @@ input[type='date'], input[type='time'], input[type='month'] { min-height: 46px; 
   gap: 12px;
 }
 .summary-card {
-  background: #FFFFFF;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   padding: 16px;
@@ -344,7 +344,7 @@ input[type='date'], input[type='time'], input[type='month'] { min-height: 46px; 
   gap: 12px;
 }
 .analysis-card {
-  background: #FFFFFF;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   padding: 16px;
@@ -370,7 +370,7 @@ input[type='date'], input[type='time'], input[type='month'] { min-height: 46px; 
   gap: 12px;
 }
 .ranking-card {
-  background: #FFFFFF;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   padding: 16px;
@@ -382,7 +382,7 @@ input[type='date'], input[type='time'], input[type='month'] { min-height: 46px; 
   align-items: center;
   gap: 12px;
   padding: 10px 12px;
-  background: #FFFFFF;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
 }
@@ -408,7 +408,7 @@ input[type='date'], input[type='time'], input[type='month'] { min-height: 46px; 
   margin-bottom: 18px;
 }
 .report-item {
-  background: #FFFFFF;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   padding: 14px 16px;
@@ -428,7 +428,7 @@ input[type='date'], input[type='time'], input[type='month'] { min-height: 46px; 
   justify-content: space-between;
   align-items: center;
   padding: 9px 12px;
-  background: #FFFFFF;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   font-size: 12.5px;
@@ -445,7 +445,7 @@ input[type='date'], input[type='time'], input[type='month'] { min-height: 46px; 
   gap: 12px;
 }
 .platform-card {
-  background: #FFFFFF;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   padding: 14px 16px;
@@ -482,7 +482,7 @@ input[type='date'], input[type='time'], input[type='month'] { min-height: 46px; 
   margin-bottom: 18px;
 }
 .tax-card {
-  background: #FFFFFF;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   padding: 16px;
@@ -490,7 +490,7 @@ input[type='date'], input[type='time'], input[type='month'] { min-height: 46px; 
 .tax-card span { display: block; font-size: 11.5px; font-weight: 700; color: var(--text-2); }
 .tax-card strong { display: block; font-size: 21px; font-weight: 900; margin-top: 4px; }
 .tax-notes {
-  background: #FFFFFF;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 14px;
@@ -522,7 +522,7 @@ input[type='date'], input[type='time'], input[type='month'] { min-height: 46px; 
 .filters input, .filters select { padding: 9px 12px; font-size: 13.5px; min-height: 0; }
 .records-list { display: grid; gap: 10px; }
 .record-card {
-  background: #FFFFFF;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   padding: 16px;
@@ -664,7 +664,7 @@ input[type='date'], input[type='time'], input[type='month'] { min-height: 46px; 
   gap: 16px;
 }
 .marketing-card {
-  background: #FFFFFF;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 28px 24px;
@@ -779,7 +779,7 @@ input[type='date'], input[type='time'], input[type='month'] { min-height: 46px; 
   min-height: 54px;
   border: 1px solid transparent;
   border-radius: 10px;
-  background: #FFFFFF;
+  background: var(--surface);
   color: var(--text);
   font-family: var(--font);
   cursor: pointer;
@@ -806,7 +806,7 @@ input[type='date'], input[type='time'], input[type='month'] { min-height: 46px; 
 .yr-cell {
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  background: #FFFFFF;
+  background: var(--surface);
   color: var(--text);
   font-family: var(--font);
   cursor: pointer;
@@ -827,7 +827,7 @@ input[type='date'], input[type='time'], input[type='month'] { min-height: 46px; 
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-  background: #FFFFFF;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 12px 14px;
@@ -874,7 +874,7 @@ input[type='date'], input[type='time'], input[type='month'] { min-height: 46px; 
 .type-toggle {
   display: flex;
   gap: 6px;
-  background: #FFFFFF;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 999px;
   padding: 5px;
@@ -928,7 +928,7 @@ input[type='date'], input[type='time'], input[type='month'] { min-height: 46px; 
   transition: transform 0.2s;
 }
 .more-fields[open] summary::before { transform: rotate(90deg); }
-.more-fields summary:hover { color: var(--text); background: #FFFFFF; }
+.more-fields summary:hover { color: var(--text); background: var(--surface); }
 .more-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -965,7 +965,7 @@ input[type='date'], input[type='time'], input[type='month'] { min-height: 46px; 
   transition: transform 0.25s;
 }
 .panel-collapse[open] > summary::after { transform: rotate(180deg); color: var(--brand); }
-.panel-collapse > summary:hover { background: #FFFFFF; }
+.panel-collapse > summary:hover { background: var(--surface); }
 .collapse-body { padding: 0 20px 22px; }
 
 /* ===== レスポンシブ ===== */
@@ -982,4 +982,24 @@ input[type='date'], input[type='time'], input[type='month'] { min-height: 46px; 
 @media (prefers-reduced-motion: reduce) {
   .app-screen.is-active { animation: none; }
   * { transition-duration: 0.01ms !important; }
+}
+
+/* ===== ナイトモード（端末設定に自動追従） ===== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #121416;
+    --bg-soft: #1C1F23;
+    --surface: #1C1F23;
+    --surface-strong: #26292E;
+    --border: #2E3237;
+    --border-strong: #3A3F45;
+    --text: #F2F4F6;
+    --text-2: #9BA2AB;
+    --text-3: #6E7681;
+    --brand-soft: rgba(16, 185, 129, 0.16);
+    --red-soft: rgba(248, 113, 113, 0.16);
+    color-scheme: dark;
+  }
+  .bottom-nav { background: rgba(28, 31, 35, 0.94); }
+  .goal-ring { background: conic-gradient(#10B981 var(--goal-progress), #2E3237 0); }
 }
