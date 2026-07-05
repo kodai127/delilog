@@ -860,6 +860,12 @@ input[type='date'], input[type='time'], input[type='month'] { min-height: 46px; 
   font-weight: 600;
   margin-top: 10px;
 }
+.share-cta {
+  width: 100%;
+  margin-top: 10px;
+  padding: 14px 24px;
+  font-size: 14.5px;
+}
 .hidden-field { display: none !important; }
 .type-toggle {
   display: flex;

@@ -20,7 +20,7 @@
   <title>デリログ | 配達員向け売上・利益・時給管理</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="icon.svg">
-  <link rel="stylesheet" href="styles.css?v=20260705b">
+  <link rel="stylesheet" href="styles.css?v=20260705c">
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -68,6 +68,7 @@
         </div>
       </div>
       <button class="primary-button big-cta" id="homeRecordCta" type="button">＋ 記録をつける</button>
+      <button class="ghost-button share-cta" id="shareTodayButton" type="button">𝕏 今日のもうけをシェア</button>
       <p class="home-hint">稼いだ額と経費をいれると、もうけを自動で合算します</p>
     </section>
 
@@ -427,19 +428,35 @@
   <script src="script.js?v=20260705b"></script>
   <script>
     // 売上/経費のワンタップ切替（隠しselect #type と同期して既存ロジックを動かす）
+    function syncTypeToggle() {
+      const current = document.getElementById('type').value;
+      document.querySelectorAll('#typeToggle .type-btn').forEach((b) => {
+        b.classList.toggle('is-active', b.dataset.type === current);
+      });
+    }
     document.querySelectorAll('#typeToggle .type-btn').forEach((btn) => {
       btn.addEventListener('click', () => {
-        document.querySelectorAll('#typeToggle .type-btn').forEach((b) => {
-          b.classList.toggle('is-active', b === btn);
-        });
         const typeSelect = document.getElementById('type');
         typeSelect.value = btn.dataset.type;
         typeSelect.dispatchEvent(new Event('change'));
+        syncTypeToggle();
       });
+    });
+    // 保存後の form.reset() で select が「売上」に戻るため、トグル表示も追従させる
+    document.getElementById('entryForm').addEventListener('reset', () => {
+      setTimeout(syncTypeToggle, 0);
     });
     // ホームの大ボタン → 記録タブへ
     document.getElementById('homeRecordCta').addEventListener('click', () => {
       document.querySelector('.bottom-nav [data-target-screen="record"]').click();
+    });
+    // 𝕏シェア（拡散装置）: 今日のもうけをポスト
+    document.getElementById('shareTodayButton').addEventListener('click', () => {
+      const profit = document.getElementById('todayProfit').textContent;
+      const sales = document.getElementById('todaySales').textContent;
+      const expenses = document.getElementById('todayExpenses').textContent;
+      const text = `今日のもうけ ${profit}\n（稼いだ ${sales} − 経費 ${expenses}）\n\n#デリログ で自動計算 🛵\nhttps://uber-sales-app.vercel.app`;
+      window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(text), '_blank', 'noopener');
     });
   </script>
 </body>
